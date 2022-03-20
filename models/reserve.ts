@@ -13,7 +13,6 @@ const reserveSchema = new mongoose.Schema({
     required: [true, 'Please add a phone number'],
     unique: true,
     trim: true,
-    index: { unique: true, sparse: true },
     maxlength: [10, 'Phone cannot be more than 10 characters'],
   },
   date: {
@@ -28,6 +27,14 @@ const reserveSchema = new mongoose.Schema({
     required: [true, 'Please add a time'],
     unique: false,
     trim: true,
+    maxlength: [5, 'Time cannot be more than 5 characters'],
+  },
+  slug: {
+    type: String,
+    required: [true, 'Please add a time'],
+    unique: true,
+    trim: true,
+    index: { unique: true, sparse: true },
     maxlength: [5, 'Time cannot be more than 5 characters'],
   },
 })
