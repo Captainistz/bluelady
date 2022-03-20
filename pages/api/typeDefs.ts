@@ -4,7 +4,8 @@ export const typeDefs = gql`
   type Query {
     hello: String!
     reserves: [Reserve!]!
-    reserve(phone: String!): [Reserve!]!
+    reserveBySlug(slug: String!): Reserve!
+    reserveByPhone(phone: String!): Reserve!
   }
   type Reserve {
     id: ID!
@@ -12,13 +13,11 @@ export const typeDefs = gql`
     phone: String!
     date: String!
     time: String!
-  }
-  type Deleted {
-    acknowledged: Boolean!
-    deletedCount: Int!
+    slug: String
   }
   type Mutation {
     createReserve(name: String!, phone: String!, date: String!, time: String!): Reserve!
-    deleteReserve(id: ID!): Deleted!
+    deleteReserve(slug: String!): Boolean!
+    editDateTime(date: String!, time: String!, slug: String!): Boolean!
   }
 `
