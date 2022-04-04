@@ -1,5 +1,6 @@
 import dbConnect from './utils/dbConnect'
 import Reserve from '../../models/reserve'
+import Cocktails from '../../models/cocktails'
 import { nanoid } from 'nanoid'
 
 dbConnect()
@@ -50,6 +51,7 @@ export const resolvers = {
         return reservedDone['deletedCount'] == 1
       } catch (e) {
         console.log(e)
+        return false
       }
     },
     editDateTime: async (_parent: any, { date, time, slug }) => {
@@ -60,6 +62,16 @@ export const resolvers = {
         reserved.time = time
         const doc = await reserved.save()
         return doc == reserved
+      } catch (e) {
+        console.log(String(e))
+        return false
+      }
+    },
+    createCocktail: async (_parent: any, { cocktailInput }) => {
+      try {
+        await Cocktails.syncIndexes()
+        const cocktailsDone = await Cocktails.create(cocktailInput)
+        return cocktailsDone
       } catch (e) {
         console.log(String(e))
       }

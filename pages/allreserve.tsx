@@ -3,36 +3,9 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const AllReserve: NextPage = () => {
-  const [reserves, setReserves] = useState([])
-  const router = useRouter()
-  useEffect(() => {
-    const fetchReserve = async () => {
-      try {
-        const res = await fetch(process.env.NEXT_PUBLIC_ENDPOINT + '/api/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: `{
-            reserves {
-              name
-              id
-            }
-          }
-          `,
-          }),
-        })
-        const data = await res.json()
-        setReserves(data['data']['reserves'])
-      } catch (e) {
-        console.log(String(e))
-      }
-    }
-    fetchReserve()
-  }, [router.isReady])
-  
+import fetchData from './api/utils/fetch'
+
+const AllReserve: NextPage = ({ reserves }: any) => {
   return (
     <div className='main-bg'>
       <Head>
@@ -44,6 +17,23 @@ const AllReserve: NextPage = () => {
       </main>
     </div>
   )
+}
+
+export const getStaticProps = async () => {
+  const reserves = await fetchData({
+    query: `{
+    reserves {
+      name
+      id
+    }
+  }
+  `,
+  })
+  return {
+    props: {
+      reserves: reserves['data']['reserves'],
+    },
+  }
 }
 
 export default AllReserve
